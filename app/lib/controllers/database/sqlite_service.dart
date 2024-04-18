@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 //initialize the data base of sqlite
 //this is applied for only ONE user right now. that user is stored on shared preferences
 class SQLiteService {
-  static Database? _database;
+  Database? _database;
 
   Future<Database> get database async {
     if (_database != null) return _database!;

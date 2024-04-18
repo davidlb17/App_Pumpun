@@ -52,10 +52,6 @@ class BookProfileScreen extends StatelessWidget {
                   fontSize: ScreenConstants.width * 0.05,
                   color: Theme.of(context).colorScheme.outline,
                 ),
-
-                book.authorList!.join(", "),
-                style: TextStyle(fontSize: ScreenConstants.width * 0.05,
-                       color: Theme.of(context).colorScheme.outline,),
               ),
             ),
             SizedBox(height: ScreenConstants.height * 0.02),
