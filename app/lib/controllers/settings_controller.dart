@@ -9,10 +9,8 @@ class SettingsController {
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   final nameController = TextEditingController();
-  AppTheme? themeConfiguration = Configuration.theme;
 
   bool changeSettings(BuildContext context) {
-    print('AAAAAAAAAAAAAAAAAAAA');
     bool error = false;
     String newEmail = emailController.text;
     String newPassword = passwordController.text;
@@ -25,7 +23,7 @@ class SettingsController {
       } else {
         error = true;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text("The email is not valid."),
           ),
         );
@@ -36,20 +34,22 @@ class SettingsController {
     }
     // 1 mayuscula, 1 minuscula, 1 numero y 8 letras
     if (newPassword.isNotEmpty) {
-      if (newPassword.contains(
-      RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$'))) {
+      if (newPassword
+          .contains(RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$'))) {
         Configuration.user.password = newPassword;
       } else {
         error = true;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text(
-                "The password must have one upper case letter, one lower case letter, one number and one special character"),
+              "The password must have one upper case letter, one lower case letter, one number and one special character",
+            ),
           ),
         );
       }
     }
-    Configuration.theme = themeConfiguration!;
+    // Configuration.theme =
+
     return error;
   }
 }

@@ -1,4 +1,5 @@
 import 'package:app/constants/screen_constants.dart';
+import 'package:app/constants/theme_constants.dart';
 import 'package:app/controllers/settings_controller.dart';
 import 'package:app/data/common/configuration.dart';
 import 'package:app/data/dummy/dummy_bryan.dart';
@@ -21,6 +22,10 @@ import '../../models/book.dart';
 /// [TextButton] para acceder al historial y un [ScrollableBookList] con los últimos
 /// libros que le han gustado.
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({required this.onChangeSettings});
+
+  final void Function(BuildContext context) onChangeSettings;
+
   @override
   State<ProfileScreen> createState() {
     return _ProfileScreenState();
@@ -45,23 +50,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       MaterialPageRoute(
         builder: (context) => SettingsScreen(
           controller: settingsController,
-          onChangeSettings: () => changeSettings(context),
+          onChangeSettings: widget.onChangeSettings,
         ),
       ),
     );
-  }
-
-  void changeSettings(BuildContext context) {
-    bool error = false;
-    setState(() {
-      error = settingsController.changeSettings(context);
-      if (!error) {
-        SharedPreferencesController().saveUser();
-      }
-    });
-    if (!error) {
-      Navigator.pop(context);
-    }
   }
 
   @override
@@ -100,12 +92,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   'Last Liked',
                   style: TextStyle(
                     fontSize: ScreenConstants.height * 0.04,
+                    color: Theme.of(context).colorScheme.outline,
                   ),
                 ),
                 TextButton(
-                  style: const ButtonStyle(
-                      foregroundColor:
-                          MaterialStatePropertyAll<Color>(Colors.amber)),
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStatePropertyAll<Color>(
+                        Theme.of(context).colorScheme.tertiary),
+                  ),
                   onPressed: () {
                     _openRecordsScreen(context);
                   },

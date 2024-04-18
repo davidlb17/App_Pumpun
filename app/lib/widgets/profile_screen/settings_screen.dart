@@ -1,5 +1,6 @@
 import 'package:app/controllers/settings_controller.dart';
 import 'package:app/models/enums.dart';
+import 'package:app/widgets/profile_screen/theme_settings.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/screen_constants.dart';
@@ -9,7 +10,7 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen(
       {super.key, required this.controller, required this.onChangeSettings});
 
-  final void Function() onChangeSettings;
+  final void Function(BuildContext context) onChangeSettings;
   final SettingsController controller;
 
   @override
@@ -21,34 +22,54 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    // print(Configuration.theme);
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(onPressed: () => widget.onChangeSettings()),
-        title: Text('Settings'),
+        backgroundColor: Colors.transparent,
+        leading: BackButton(
+          onPressed: () => widget.onChangeSettings(context),
+          color: Theme.of(context).colorScheme.outline,
+        ),
+        title: Text(
+          'Settings',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.fromLTRB(ScreenConstants.width * 0.05,
-              ScreenConstants.height * 0.05, ScreenConstants.width * 0.05, 0),
+          padding: EdgeInsets.fromLTRB(
+            ScreenConstants.width * 0.05,
+            ScreenConstants.height * 0.05,
+            ScreenConstants.width * 0.05,
+            0,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Username
               TextField(
                 controller: widget.controller.usernameController,
-                cursorColor: Colors.amber,
-                decoration: InputDecoration()
+                cursorColor: Theme.of(context).colorScheme.tertiary,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    decorationColor: Theme.of(context).colorScheme.outline),
+                decoration: const InputDecoration()
                     .applyDefaults(
-                      InputDecorationTheme(),
+                      const InputDecorationTheme(),
                     )
                     .copyWith(
+                      labelText: 'Username',
+                      hintText: Configuration.user.username,
+                      hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(0.6)),
                       labelStyle: TextStyle(
                         fontSize: ScreenConstants.height * 0.03,
-                        color: Colors.amber,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
-                      hintText: Configuration.user.username,
-                      labelText: 'Username',
                     ),
               ),
               SizedBox(height: ScreenConstants.height * 0.02),
@@ -56,98 +77,91 @@ class _SettingsScreenState extends State<SettingsScreen> {
               TextField(
                 controller: widget.controller.passwordController,
                 obscureText: true,
-                cursorColor: Colors.amber,
-                //obscureText: true,
-                decoration: InputDecoration()
+                cursorColor: Theme.of(context).colorScheme.tertiary,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    decorationColor: Theme.of(context).colorScheme.outline),
+                decoration: const InputDecoration()
                     .applyDefaults(
-                      InputDecorationTheme(),
+                      const InputDecorationTheme(),
                     )
                     .copyWith(
+                      labelText: 'Password',
+                      hintText: Configuration.user.password,
+                      hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(0.6)),
                       labelStyle: TextStyle(
                         fontSize: ScreenConstants.height * 0.03,
-                        color: Colors.amber,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
-                      labelText: 'Password',
                     ),
               ),
               SizedBox(height: ScreenConstants.height * 0.02),
               // Email
               TextField(
                 controller: widget.controller.emailController,
-                cursorColor: Colors.amber,
-                decoration: InputDecoration()
+                cursorColor: Theme.of(context).colorScheme.tertiary,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    decorationColor: Theme.of(context).colorScheme.outline),
+                decoration: const InputDecoration()
                     .applyDefaults(
-                      InputDecorationTheme(),
+                      const InputDecorationTheme(),
                     )
                     .copyWith(
+                      labelText: 'Email',
+                      hintText: Configuration.user.email,
+                      hintStyle: TextStyle(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surface
+                            .withOpacity(0.6),
+                      ),
                       labelStyle: TextStyle(
                         fontSize: ScreenConstants.height * 0.03,
-                        color: Colors.amber,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
-                      hintText: Configuration.user.email,
-                      labelText: 'Email',
                     ),
               ),
               SizedBox(height: ScreenConstants.height * 0.02),
               // Name
               TextField(
                 controller: widget.controller.nameController,
-                cursorColor: Colors.amber,
-                decoration: InputDecoration()
+                cursorColor: Theme.of(context).colorScheme.tertiary,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.outline,
+                    decorationColor: Theme.of(context).colorScheme.outline),
+                decoration: const InputDecoration()
                     .applyDefaults(
-                      InputDecorationTheme(),
+                      const InputDecorationTheme(),
                     )
                     .copyWith(
+                      labelText: 'Name',
+                      hintText: Configuration.user.name,
+                      hintStyle: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withOpacity(0.6)),
                       labelStyle: TextStyle(
                         fontSize: ScreenConstants.height * 0.03,
-                        color: Colors.amber,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
-                      hintText: Configuration.user.name,
-                      labelText: 'Name',
                     ),
               ),
-              SizedBox(height: ScreenConstants.height * 0.03),
-              // Radio Buttons Theme
+              SizedBox(height: ScreenConstants.height * 0.02),
               Text(
-                'Theme',
+                'Themes',
                 style: TextStyle(
-                  color: Colors.amber,
                   fontSize: ScreenConstants.height * 0.03,
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
               ),
-              // Light
-              RadioListTile(
-                  activeColor: Colors.amber,
-                  title: Text('Light Theme'),
-                  value: AppTheme.light,
-                  groupValue: widget.controller.themeConfiguration,
-                  onChanged: (AppTheme? value) {
-                    setState(() {
-                      widget.controller.themeConfiguration = value;
-                    });
-                  }),
-              // Dark
-              RadioListTile(
-                  activeColor: Colors.amber,
-                  title: Text('Dark Theme'),
-                  value: AppTheme.dark,
-                  groupValue: widget.controller.themeConfiguration,
-                  onChanged: (AppTheme? value) {
-                    setState(() {
-                      widget.controller.themeConfiguration = value;
-                    });
-                  }),
-              // Device Settings
-              RadioListTile(
-                  activeColor: Colors.amber,
-                  title: Text('Use device settings'),
-                  value: AppTheme.prefered,
-                  groupValue: widget.controller.themeConfiguration,
-                  onChanged: (AppTheme? value) {
-                    setState(() {
-                      widget.controller.themeConfiguration = value;
-                    });
-                  }),
+              SizedBox(height: ScreenConstants.height * 0.01),
+              ThemeSettings(),
             ],
           ),
         ),

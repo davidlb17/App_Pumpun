@@ -1,6 +1,6 @@
 import 'package:app/constants/screen_constants.dart';
 import 'package:app/models/enums.dart';
-import 'package:app/widgets/common/book_profile_screen/gender_card.dart';
+import 'package:app/widgets/common/book_profile_screen/genre_card.dart';
 import 'package:app/widgets/common/goback_appbar.dart';
 import 'package:flutter/material.dart';
 
@@ -36,7 +36,10 @@ class BookProfileScreen extends StatelessWidget {
                   EdgeInsets.symmetric(horizontal: ScreenConstants.width * 0.1),
               child: Text(
                 book.title,
-                style: TextStyle(fontSize: ScreenConstants.width * 0.07),
+                style: TextStyle(
+                  fontSize: ScreenConstants.width * 0.07,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
             ),
             SizedBox(height: ScreenConstants.height * 0.02),
@@ -44,8 +47,15 @@ class BookProfileScreen extends StatelessWidget {
               padding:
                   EdgeInsets.symmetric(horizontal: ScreenConstants.width * 0.1),
               child: Text(
+                book.authorList.join(", "),
+                style: TextStyle(
+                  fontSize: ScreenConstants.width * 0.05,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+
                 book.authorList!.join(", "),
-                style: TextStyle(fontSize: ScreenConstants.width * 0.05),
+                style: TextStyle(fontSize: ScreenConstants.width * 0.05,
+                       color: Theme.of(context).colorScheme.outline,),
               ),
             ),
             SizedBox(height: ScreenConstants.height * 0.02),
@@ -53,11 +63,13 @@ class BookProfileScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               mainAxisSize: MainAxisSize.max,
               children: [
-                ...genreNames.map((name) => GenreCard(genre: name)),
+                ...genreNames.map(
+                  (name) => GenreCard(genre: name),
+                ),
                 Icon(
                   IconData(recordIcons[book.record]!,
                       fontFamily: 'MaterialIcons'),
-                  color: Colors.amber,
+                  color: Theme.of(context).colorScheme.tertiary,
                 ),
               ],
             ),
@@ -69,16 +81,18 @@ class BookProfileScreen extends StatelessWidget {
                 OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.amber,
-                    side: BorderSide(color: Colors.amber),
+                    foregroundColor: Theme.of(context).colorScheme.tertiary,
+                    side: BorderSide(
+                        color: Theme.of(context).colorScheme.tertiary),
                   ),
                   child: Text('Comprar'),
                 ),
                 OutlinedButton(
                   onPressed: () {},
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.amber,
-                    side: BorderSide(color: Colors.amber),
+                    foregroundColor: Theme.of(context).colorScheme.tertiary,
+                    side: BorderSide(
+                        color: Theme.of(context).colorScheme.tertiary),
                   ),
                   child: Text('Listas'),
                 ),
@@ -90,7 +104,10 @@ class BookProfileScreen extends StatelessWidget {
                   ScreenConstants.width * 0.05, ScreenConstants.height * 0.05),
               child: Text(
                 book.description,
-                style: TextStyle(fontSize: ScreenConstants.width * 0.05),
+                style: TextStyle(
+                  fontSize: ScreenConstants.width * 0.05,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
             ),
           ],

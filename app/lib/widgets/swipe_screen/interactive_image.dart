@@ -15,6 +15,7 @@ class InteractiveImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder<List<Book>>(
         future: BookService().getAllBooks(),
         builder: (context, snapshot) {
@@ -70,5 +71,6 @@ class InteractiveImage extends StatelessWidget {
             );
           }
         });
+
   }
 }

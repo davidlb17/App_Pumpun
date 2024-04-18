@@ -13,6 +13,10 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 /// This class creates and uses bottomNavigationBar, it also controls switching between different screens.
 class MyHomePageController extends StatefulWidget {
+  const MyHomePageController({required this.onChangeSettings});
+
+  final void Function(BuildContext context) onChangeSettings;
+
   @override
   _MyHomePageControllerState createState() => _MyHomePageControllerState();
 }
@@ -20,12 +24,7 @@ class MyHomePageController extends StatefulWidget {
 class _MyHomePageControllerState extends State<MyHomePageController> {
   int _selectedIndex = 0;
 
-  final List<Widget> _screens = [
-    SwipeScreen(),
-    SearchScreen(),
-    BookListsScreen(),
-    ProfileScreen(),
-  ];
+  List<Widget> _screens = [];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -36,13 +35,15 @@ class _MyHomePageControllerState extends State<MyHomePageController> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      //init shared preferences
-      SharedPreferencesController().loadUser();
+    _screens = [
+      SwipeScreen(),
+      SearchScreen(),
+      BookListsScreen(),
+      ProfileScreen(onChangeSettings: widget.onChangeSettings)
+    ];
       //init db
       //add first data (books, listbooks, put that books on the list, add genres and authors to those books)
-      SQLiteService().initializeDB;
-    });
+      SQLiteService().initializeDB:
   }
 
   @override
@@ -50,16 +51,16 @@ class _MyHomePageControllerState extends State<MyHomePageController> {
     return Scaffold(
       body: _screens[_selectedIndex], // Muestra la pantalla seleccionada
       bottomNavigationBar: Container(
-        color: Colors.black,
+        color: Theme.of(context).colorScheme.primary,
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: ScreenConstants.width * 0.0382,
               vertical: ScreenConstants.height * 0.01276),
           // padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
           child: GNav(
-            color: Colors.white,
-            activeColor: Colors.amber,
-            tabBackgroundColor: Color.fromARGB(255, 56, 55, 55),
+            color: Theme.of(context).colorScheme.outline,
+            activeColor: Theme.of(context).colorScheme.tertiary,
+            tabBackgroundColor: Theme.of(context).colorScheme.secondary,
             gap: 9,
             padding: EdgeInsets.all(16),
             tabs: [
