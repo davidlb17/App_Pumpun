@@ -5,34 +5,32 @@ import 'package:app/controllers/database/sqlite_service.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BookListService {
-  Future<int> createBookList(BookList bookList) async {
-    final Database database = await SQLiteService().database;
+  static Future<int> createBookList(
+      Database database, BookList bookList) async {
     //insert the data and put the id to the booklist class
     return await database.insert('booklist', bookList.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> deleteBookList(int id) async {
-    final Database database = await SQLiteService().database;
+  static Future<void> deleteBookList(Database database, int id) async {
     await database.delete('booklist', where: 'id=?', whereArgs: [id]);
   }
 
-  Future<List<BookList>> getAllBookLists() async {
-    final Database database = await SQLiteService().database;
+  static Future<List<BookList>> getAllBookLists(Database database) async {
     final List<Map<String, dynamic>> bookListMaps =
         await database.query('book');
     List<BookList> bookLists =
         bookListMaps.map((e) => BookList.fromMap(e)).toList();
 
     for (BookList bookList in bookLists) {
-      bookList.books = await BookService().getBooksByListId(bookList.id);
+      bookList.books =
+          await BookService.getBooksByListId(database, bookList.id);
     }
 
     return bookLists;
   }
 
-  Future<BookList> getBookListById(int id) async {
-    final Database database = await SQLiteService().database;
+  static Future<BookList> getBookListById(Database database, int id) async {
     final rows =
         await database.query('booklist', where: 'id=?', whereArgs: [id]);
 
@@ -40,7 +38,7 @@ class BookListService {
 
     BookList bookList = BookList.fromMap(row);
 
-    bookList.books = await BookService().getBooksByListId(bookList.id);
+    bookList.books = await BookService.getBooksByListId(database, bookList.id);
 
     return bookList;
   }

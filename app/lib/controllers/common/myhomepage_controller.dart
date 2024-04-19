@@ -41,9 +41,6 @@ class _MyHomePageControllerState extends State<MyHomePageController> {
       BookListsScreen(),
       ProfileScreen(onChangeTheme: widget.onChangeTheme)
     ];
-    //init db
-    //add first data (books, listbooks, put that books on the list, add genres and authors to those books)
-    SQLiteService().initializeDB;
   }
 
   @override

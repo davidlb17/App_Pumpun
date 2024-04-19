@@ -5,16 +5,15 @@ import 'package:app/models/enums.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AuthorService {
-  Future<int> createAuthor(Author author) async {
-    final Database database = await SQLiteService().database;
+  static Future<int> createAuthor(Database database, Author author) async {
     //insert the data and put the id to the author class
     return await database.insert('author', author.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   //put an author on a book
-  Future<void> addAuthorToBook(Author author, Book book) async {
-    final Database database = await SQLiteService().database;
+  static Future<void> addAuthorToBook(
+      Database database, Author author, Book book) async {
     await database.insert(
         'bookauthor', {'author_id': author.id, 'book_id': book.id},
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -22,11 +21,12 @@ class AuthorService {
   }
 
   //get all the authors a book has
-  Future<List<String>> getAuthorsByBookId(int id) async {
-    final Database database = await SQLiteService().database;
-    final List<Map<String, dynamic>> authorMaps =
+  static Future<List<String>> getAuthorsByBookId(
+      Database database, int id) async {
+    final List<Map<String, dynamic>> authorBookMaps =
         await database.query('bookauthor', where: 'book_id=?', whereArgs: [id]);
 
-    return authorMaps.map((e) => Author.fromMap(e).name).toList();
+    //TODO change the author to the names and not the IDs
+    return authorBookMaps.map((e) => e['author_id'].toString()).toList();
   }
 }

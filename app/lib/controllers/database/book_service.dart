@@ -8,47 +8,45 @@ import 'package:app/models/enums.dart';
 import 'package:sqflite/sqflite.dart';
 
 class BookService {
-  Future<int> createBook(Book book) async {
-    final Database database = await SQLiteService().database;
+  static Future<int> createBook(Database database, Book book) async {
     //insert the data and put the id to the book class
     return await database.insert('book', book.toMap(false),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> updateBook(Book book) async {
-    final Database database = await SQLiteService().database;
+  static Future<void> updateBook(Database database, Book book) async {
     await database.update('book', book.toMap(true),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<List<Book>> getBooksByListId(int id) async {
-    final Database database = await SQLiteService().database;
+  static Future<List<Book>> getBooksByListId(Database database, int id) async {
     final List<Map<String, dynamic>> bookMaps = await database
         .query('bookOnList', where: 'booklist_id=?', whereArgs: [id]);
 
     List<Book> books = bookMaps.map((e) => Book.fromMap(e)).toList();
 
     for (Book book in books) {
-      book.genreList = await GenreService().getGenresByBookId(book.id);
-      book.authorList = await AuthorService().getAuthorsByBookId(book.id);
+      book.genreList = await GenreService.getGenresByBookId(database, book.id);
+      book.authorList =
+          await AuthorService.getAuthorsByBookId(database, book.id);
     }
     return books;
   }
 
-  Future<List<Book>> getAllBooks() async {
-    final Database database = await SQLiteService().database;
+  static Future<List<Book>> getAllBooks(Database database) async {
     final List<Map<String, dynamic>> bookMaps = await database.query('book');
     List<Book> books = bookMaps.map((e) => Book.fromMap(e)).toList();
 
     for (Book book in books) {
-      book.genreList = await GenreService().getGenresByBookId(book.id);
-      book.authorList = await AuthorService().getAuthorsByBookId(book.id);
+      book.genreList = await GenreService.getGenresByBookId(database, book.id);
+      book.authorList =
+          await AuthorService.getAuthorsByBookId(database, book.id);
     }
     return books;
   }
 
-  Future<void> addBookToList(Book book, BookList bookList) async {
-    final Database database = await SQLiteService().initializeDB();
+  static Future<void> addBookToList(
+      Database database, Book book, BookList bookList) async {
     await database.insert(
         'bookonlist', {'book_id': book.id, 'booklist_id': bookList.id},
         conflictAlgorithm: ConflictAlgorithm.replace);

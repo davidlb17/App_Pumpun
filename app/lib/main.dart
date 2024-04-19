@@ -1,5 +1,6 @@
 import 'package:app/controllers/common/myhomepage_controller.dart';
 import 'package:app/controllers/common/shared_preferences_controller.dart';
+import 'package:app/controllers/database/sqlite_service.dart';
 import 'package:app/data/dummy/dummy_bryan.dart';
 import 'package:app/widgets/themes/dark_theme.dart';
 import 'package:app/widgets/themes/light_theme.dart';
@@ -16,7 +17,6 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-
   @override
   State<MyApp> createState() {
     return _MyAppState();
@@ -24,6 +24,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // void changeTheme() {
+  //   bool error = false;
+  //   setState(() {
+  //     error = widget.settingsController.changeSettings(context);
+  //     if (!error) {
+  //       SharedPreferencesController().saveUser();
+  //     }
+  //     ThemeConstants.changeToAqua();
+  //   });
+  //   if (!error) {
+  //     Navigator.pop(context);
+  //   }
+  // }
 
   void changeTheme() {
     setState(() {
@@ -33,13 +46,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
     setState(() {
-
       SharedPreferencesController().loadUser().then((value) => changeTheme());
-
     });
   }
 
+  //use the future builder to ensure the ddbb and initial data are creted before using the data on the pages
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,7 +61,22 @@ class _MyAppState extends State<MyApp> {
       theme: LightTheme().materialTheme,
       darkTheme: DarkTheme().materialTheme,
       debugShowCheckedModeBanner: false,
-      home: MyHomePageController(onChangeTheme: changeTheme,),
+      home: FutureBuilder(
+        future: SQLiteService.initializeDB(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return MyHomePageController(
+              onChangeTheme: changeTheme,
+            );
+          } else {
+            return Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
